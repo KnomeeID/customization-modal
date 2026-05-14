@@ -82,6 +82,7 @@
       display: flex;
       padding-top: 60px;
       min-height: 100vh;
+      align-items: stretch;
     }
 
     /* ── Sidebar ── */
@@ -95,7 +96,7 @@
       display: flex;
       flex-direction: column;
       gap: 32px;
-      height: fit-content;
+      align-self: stretch;
     }
     .sidebar-heading { }
     .sidebar-heading h1 {
@@ -156,6 +157,7 @@
       border-radius: 24px;
       padding: 38px 48px;
       min-height: calc(100vh - 60px - 48px);
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
     }
     .main-header {
       display: flex;
@@ -356,10 +358,6 @@
     }
     .btn-save:hover { background: var(--primary-70); }
 
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
   </style>
 </head>
 <body>
@@ -446,7 +444,7 @@
           <input type="url" id="scheduling-link" value="https://AcmeAdvisors.com/schedule" placeholder="https://..." />
         </div>
 
-        <div class="divider"></div>
+
         <button class="btn-save">Save Changes</button>
       </section>
 
@@ -476,7 +474,7 @@
           </div>
         </div>
 
-        <div class="divider"></div>
+
 
         <div>
           <p class="section-label">Prospect Visibility — Advisors</p>
@@ -487,7 +485,7 @@
           </div>
         </div>
 
-        <div class="divider"></div>
+
         <button class="btn-save">Save Changes</button>
       </section>
 
@@ -521,7 +519,7 @@
           </div>
         </div>
 
-        <div class="divider"></div>
+
         <button class="btn-save">Save Changes</button>
       </section>
 
@@ -537,7 +535,7 @@
           <textarea id="consent-language" rows="6" placeholder="By signing up, I agree to receive communications from ..."></textarea>
         </div>
 
-        <div class="divider"></div>
+
         <button class="btn-save">Save Changes</button>
       </section>
 
