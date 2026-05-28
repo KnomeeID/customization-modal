@@ -177,7 +177,7 @@
 
     /* ── Tab panels ── */
     .tab-panel { display: none; }
-    .tab-panel.active { display: flex; flex-direction: column; gap: 28px; }
+    .tab-panel.active { display: flex; flex-direction: column; gap: 36px; }
     .tab-panel.active .main-header { margin-bottom: 0; }
 
     /* ── Form elements ── */
@@ -230,15 +230,15 @@
       font-weight: 600;
       color: var(--primary-70);
       line-height: 1.5;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
 
     /* ── UTM checkboxes ── */
     .checkbox-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px 24px;
-      margin-bottom: 14px;
+      gap: 16px 24px;
+      margin-bottom: 20px;
     }
     .checkbox-item {
       display: flex;
@@ -275,22 +275,34 @@
       line-height: 1.3;
       letter-spacing: 0.01em;
     }
-    .custom-key-row {
+    .custom-key-group {
       display: flex;
       gap: 8px;
-      align-items: center;
+      align-items: flex-start;
     }
-    .custom-key-row input {
+    .custom-key-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       flex: 1;
+    }
+    .custom-key-fields input {
+      width: 100%;
       padding: 10px 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-family: 'Poppins', sans-serif;
       font-size: 14px;
+      color: var(--neutral-100);
+      background: white;
       outline: none;
       transition: border-color 0.15s;
     }
-    .custom-key-row input:focus { border-color: var(--primary-70); }
+    .custom-key-fields input:first-child {
+      font-family: 'Courier New', monospace;
+    }
+    .custom-key-fields input:focus { border-color: var(--primary-70); }
+    .custom-key-fields input::placeholder { font-family: 'Poppins', sans-serif; }
     .btn-add {
       padding: 10px 20px;
       background: white;
@@ -466,14 +478,11 @@
         </button>
         <button class="nav-item" data-tab="prospects" onclick="switchTab('prospects')">
           <span class="nav-icon">
-            <!-- Two solid silhouettes; front has white outline separating it from back -->
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <!-- Back person: same silhouette as front, shifted right -->
-              <circle cx="11" cy="7" r="3"/>
-              <path d="M5 16A6 6 0 0 1 17 16Z"/>
-              <!-- Front person: same silhouette + white border separating from back -->
-              <circle cx="6" cy="7" r="3" stroke="white" stroke-width="2" paint-order="stroke fill"/>
-              <path d="M0 16A6 6 0 0 1 12 16Z" stroke="white" stroke-width="2" paint-order="stroke fill"/>
+            <!-- Solid megaphone/bullhorn with white sound waves -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor" d="M2.5 7H5L13 3V15L5 11H2.5C2.22 11 2 10.78 2 10.5V7.5C2 7.22 2.22 7 2.5 7Z"/>
+              <path stroke="white" stroke-width="1.5" stroke-linecap="round"
+                d="M15 6.5A3.5 3.5 0 0 1 15 11.5"/>
             </svg>
           </span>
           Marketing
@@ -617,9 +626,14 @@
               </span>
             </label>
           </div>
-          <div class="custom-key-row">
-            <input type="text" placeholder="Add custom key" />
-            <button class="btn-add">Add</button>
+          <div class="custom-key-group">
+            <div class="custom-key-fields">
+              <input type="text" id="custom-key" placeholder="custom_key"
+                onkeydown="if(event.key==='Enter')addCustomKey()" />
+              <input type="text" id="custom-key-desc" placeholder="Brief description (3–5 words)"
+                onkeydown="if(event.key==='Enter')addCustomKey()" />
+            </div>
+            <button class="btn-add" onclick="addCustomKey()">Add</button>
           </div>
         </div>
 
@@ -671,13 +685,33 @@
         <div class="font-row">
           <div class="font-field">
             <label for="font-family">Font Family</label>
-            <input type="text" id="font-family" value="Inter" placeholder="e.g. Inter, Poppins"
-              oninput="updateFontPreview()" />
+            <input type="text" id="font-family" list="font-family-list" value="Inter"
+              placeholder="Search Google Fonts…" oninput="updateFontPreview()" autocomplete="off" />
+            <datalist id="font-family-list">
+              <option value="Inter"><option value="Poppins"><option value="Roboto">
+              <option value="Open Sans"><option value="Lato"><option value="Montserrat">
+              <option value="Raleway"><option value="Nunito"><option value="DM Sans">
+              <option value="Outfit"><option value="Plus Jakarta Sans"><option value="Work Sans">
+              <option value="Fira Sans"><option value="Mulish"><option value="Quicksand">
+              <option value="Josefin Sans"><option value="Source Sans Pro"><option value="Noto Sans">
+              <option value="Playfair Display"><option value="Merriweather"><option value="EB Garamond">
+              <option value="Cormorant Garamond"><option value="Libre Baskerville">
+              <option value="Space Mono"><option value="JetBrains Mono"><option value="Fira Code">
+              <option value="Roboto Mono">
+            </datalist>
           </div>
           <div class="font-field">
             <label for="font-type">Font Type</label>
-            <input type="text" id="font-type" value="Regular" placeholder="e.g. Regular, Medium"
-              oninput="updateFontPreview()" />
+            <input type="text" id="font-type" list="font-type-list" value="Regular"
+              placeholder="e.g. Regular, Bold…" oninput="updateFontPreview()" autocomplete="off" />
+            <datalist id="font-type-list">
+              <option value="Thin"><option value="Extra Light"><option value="Light">
+              <option value="Regular"><option value="Medium"><option value="Semi Bold">
+              <option value="Bold"><option value="Extra Bold"><option value="Black">
+              <option value="Thin Italic"><option value="Light Italic"><option value="Italic">
+              <option value="Medium Italic"><option value="Semi Bold Italic">
+              <option value="Bold Italic">
+            </datalist>
           </div>
         </div>
 
@@ -727,10 +761,13 @@
       if (t.includes('bold'))       return 700;
       return 400; // regular / normal
     }
+    let _fontTimer;
     function updateFontPreview() {
       const family = document.getElementById('font-family').value.trim() || 'Poppins';
       const type   = document.getElementById('font-type').value.trim()   || 'Regular';
-      loadGoogleFont(family);
+      // Debounce font loading — apply style immediately, load font after 400ms pause
+      clearTimeout(_fontTimer);
+      _fontTimer = setTimeout(() => loadGoogleFont(family), 400);
       const weight = typeToWeight(type);
       const italic = /italic/i.test(type) ? 'italic' : 'normal';
       [document.getElementById('font-family'), document.getElementById('font-type')].forEach(el => {
@@ -741,6 +778,27 @@
     }
     // init on load
     updateFontPreview();
+
+    function addCustomKey() {
+      const keyEl  = document.getElementById('custom-key');
+      const descEl = document.getElementById('custom-key-desc');
+      const key  = keyEl.value.trim();
+      const desc = descEl.value.trim();
+      if (!key) { keyEl.focus(); return; }
+      const displayDesc = desc || key.replace(/_/g, ' ');
+      const item = document.createElement('label');
+      item.className = 'checkbox-item';
+      item.innerHTML =
+        `<input type="checkbox" checked />` +
+        `<span class="utm-label">` +
+          `<span class="utm-desc">${displayDesc}</span>` +
+          `<span class="utm-key">${key}</span>` +
+        `</span>`;
+      document.querySelector('.checkbox-grid').appendChild(item);
+      keyEl.value = '';
+      descEl.value = '';
+      keyEl.focus();
+    }
 
     function updateSlug(name) {
       document.getElementById('org-slug').value = name
