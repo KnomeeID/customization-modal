@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings — Knomee</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -362,6 +361,7 @@
       font-weight: 600;
       color: var(--primary-70);
     }
+    .font-field { position: relative; }
     .font-field input {
       width: 200px;
       padding: 10px 14px;
@@ -376,6 +376,13 @@
       transition: border-color 0.15s;
     }
     .font-field input:focus { border-color: var(--primary-70); }
+    .font-field input {
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23757575' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
     .color-input-wrap {
       display: flex;
       align-items: center;
@@ -431,27 +438,291 @@
     }
     .btn-save:hover { background: var(--primary-70); }
 
+    /* ── Custom font dropdown ── */
+    .custom-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 200px;
+      max-height: 220px;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 300;
+      display: none;
+    }
+    .custom-dropdown.open { display: block; }
+    .custom-dropdown-item {
+      padding: 8px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--neutral-100);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .custom-dropdown-item:hover { background: var(--primary-10); color: var(--primary-70); }
+    .custom-dropdown-empty {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--neutral-90);
+    }
+
+    /* ── Save toast ── */
+    .save-toast {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border-radius: 100px;
+      padding: 12px 20px 12px 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .save-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .save-toast-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #4caf50;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .save-toast-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--neutral-100);
+      white-space: nowrap;
+    }
+
+    /* ── Version blocks (Site Customization) ── */
+    .version-block {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .version-block-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .version-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      line-height: 1.5;
+    }
+    .version-badge-a { background: var(--primary-100); color: white; }
+    .version-badge-b { background: var(--primary-10); color: var(--primary-70); }
+    .version-default-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--neutral-90);
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── Landing page preview ── */
+    .preview-wrapper {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .preview-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-70);
+    }
+    .preview-version-btns { display: flex; gap: 4px; }
+    .preview-version-btn {
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      background: white;
+      color: var(--neutral-90);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .preview-version-btn.active {
+      background: var(--primary-100);
+      color: white;
+      border-color: var(--primary-100);
+    }
+    .preview-scale-outer {
+      overflow: hidden;
+      height: 378px;
+      position: relative;
+      background: white;
+    }
+    .lp-preview {
+      width: 800px;
+      transform: scale(0.605);
+      transform-origin: top left;
+      position: absolute;
+      top: 0; left: 0;
+      font-family: 'Poppins', sans-serif;
+      background: white;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── Landing page mockup elements ── */
+    .lp-preview {
+      --lp-primary: #240446;
+      --lp-accent:  #7639A1;
+    }
+    .lp-nav {
+      background: var(--lp-primary);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 0 24px;
+    }
+    .lp-nav-knomee {
+      position: absolute;
+      left: 24px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .lp-nav-knomee svg {
+      height: 16px;
+      width: auto;
+      display: block;
+    }
+    .lp-nav-knomee-advisor {
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.12px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 1px;
+    }
+    .lp-nav-org {
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 18.5px; font-weight: 700;
+      letter-spacing: -0.18px;
+      line-height: 1;
+      margin-bottom: 1px;
+    }
+    .lp-body {
+      padding: 48px 60px 40px;
+      text-align: center;
+    }
+    .lp-welcome {
+      font-size: 32px; font-weight: 700;
+      color: var(--lp-primary); line-height: 1.25;
+    }
+    .lp-header {
+      font-size: 32px; font-weight: 700;
+      color: var(--lp-primary); line-height: 1.25;
+      margin-bottom: 18px;
+    }
+    .lp-subtext {
+      font-size: 16px; font-weight: 400;
+      color: #9ca3af; line-height: 1.6;
+      max-width: 520px; margin: 0 auto 36px;
+    }
+    .lp-cards-label {
+      font-size: 15px; font-weight: 600;
+      color: #111; text-align: left;
+      margin-bottom: 14px;
+    }
+    .lp-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .lp-card {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      padding: 18px 16px 14px;
+      text-align: left;
+      position: relative;
+    }
+    .lp-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 12px; right: 12px;
+      height: 3px;
+      background: var(--lp-accent);
+      border-radius: 0 0 2px 2px;
+    }
+    .lp-card-icon { font-size: 18px; margin-bottom: 8px; }
+    .lp-card-title { font-size: 12px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.4; }
+    .lp-card-desc { font-size: 11px; color: #555; line-height: 1.5; }
+    .lp-cta {
+      display: inline-block;
+      background: var(--lp-primary);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px; font-weight: 700;
+      padding: 16px 48px;
+      border-radius: 40px;
+      border: none;
+      margin-bottom: 12px;
+      cursor: default;
+    }
+    .lp-est {
+      font-size: 12px; color: #9ca3af;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+
   </style>
-</head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&amp;display=swap"></head>
 <body>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-logo">
       <svg width="1702" height="288" viewBox="0 0 1702 288" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M165.378 198.685C164.99 198.685 164.537 198.685 164.149 198.62C110.711 192.518 93.0496 170.8 87.2917 158.466C78.8167 140.224 83.2159 121.394 98.5487 110.372C112.523 100.333 130.766 101.12 141.895 112.274C146.229 116.605 146.294 123.757 142.024 128.152C137.753 132.548 130.703 132.614 126.367 128.283C122.356 124.281 115.757 125.462 111.358 128.677C108.318 130.843 101.913 137.206 107.347 148.886C110.258 155.119 121.063 169.62 159.815 175.393C180.064 141.34 175.859 123.691 173.012 117.458C170.619 112.34 167.319 109.125 163.179 107.813C159.298 106.632 154.704 107.222 150.951 109.453C145.711 112.602 138.918 110.831 135.813 105.516C132.707 100.202 134.455 93.3125 139.695 90.1632C148.817 84.6517 159.815 83.2739 169.648 86.3577C176.764 88.5885 186.598 94.0998 193.003 107.878C198.761 120.279 204.066 147.836 174.695 193.567C172.624 196.783 169.13 198.685 165.443 198.685H165.378Z" fill="white"/>
-        <path d="M182.923 284.948C177.554 284.948 172.572 281.405 170.89 275.893C168.884 269.136 172.636 261.984 179.235 259.95C221.093 246.959 252.6 211.922 261.398 168.487C267.803 136.796 261.656 104.515 244.124 77.5489C226.592 50.5825 199.744 32.1456 168.496 25.5844C161.703 24.1409 157.304 17.383 158.727 10.4937C160.151 3.60443 166.75 -0.85719 173.607 0.586272C211.389 8.45969 243.93 30.8333 265.15 63.508C286.37 96.1828 293.81 135.288 286.046 173.67C275.372 226.291 237.266 268.742 186.611 284.423C185.382 284.816 184.152 285.014 182.923 285.014V284.948Z" fill="white"/>
-        <path d="M117.96 288C117.119 288 116.278 287.934 115.437 287.737C77.6551 279.864 45.1137 257.556 23.8938 224.815C2.67386 192.142 -4.76604 153.036 2.99733 114.653C14.7718 56.39 59.6054 11.446 117.184 0.226364C124.041 -1.08587 130.64 3.4413 131.935 10.3305C133.228 17.2854 128.764 23.9778 121.971 25.2901C74.4204 34.6069 37.415 71.6777 27.6461 119.837C21.2413 151.528 27.3872 183.809 44.9196 210.775C62.4518 237.742 89.3002 256.178 120.547 262.739C127.341 264.182 131.741 270.941 130.317 277.83C129.088 283.866 123.847 288 118.025 288H117.96Z" fill="white"/>
-        <path d="M58.8323 136.393C57.9266 136.393 57.0208 136.262 56.1152 136.066C49.5809 134.556 45.5052 127.93 47.0578 121.303C53.0745 94.861 68.86 72.4218 91.5679 58.0527C114.211 43.6838 141.059 39.1566 167.132 45.2584C202.843 53.6568 231.179 81.0825 241.013 116.972C242.824 123.534 239.072 130.291 232.602 132.128C226.134 133.966 219.47 130.094 217.658 123.599C210.218 96.4357 188.74 75.6367 161.632 69.2724C141.901 64.614 121.586 68.0914 104.378 78.983C87.2334 89.8746 75.2648 106.868 70.6715 126.88C69.3775 132.588 64.3961 136.393 58.8323 136.393Z" fill="white"/>
-        <path d="M144.457 245.68C137.018 245.68 129.448 244.828 121.944 243.055C82.3504 233.804 52.4614 201.523 45.7331 160.909C44.6333 154.217 49.0973 147.853 55.6961 146.737C62.295 145.622 68.5704 150.149 69.6702 156.841C74.7811 187.614 97.4243 212.021 127.378 219.042C168.136 228.556 208.893 202.704 218.339 161.435C219.826 154.807 226.361 150.674 232.895 152.249C239.429 153.758 243.505 160.385 241.953 167.011C231.278 213.858 190.003 245.68 144.457 245.68Z" fill="white"/>
-        <path d="M436.702 188.382H420.788V259.505H378.607V12.0173H420.788V155.38H441.167L488.2 94.0321H536.267L472.349 172.897L543.191 259.44H491.693L436.767 188.316L436.702 188.382Z" fill="white"/>
-        <path d="M720.165 152.598V254.231H677.984V158.57C677.984 137.18 666.921 123.14 646.219 123.14C619.241 123.14 607.143 147.678 607.143 168.346V254.231H564.962V88.824L597.439 87.4462C600.544 98.9939 602.615 116.184 602.615 123.533H603.65C611.93 103.587 628.557 86.7245 658.252 86.7245C698.362 86.7245 720.101 114.413 720.101 152.598H720.165Z" fill="white"/>
-        <path d="M921.586 171.888C921.586 221.688 887.75 256.331 836.252 256.331C784.756 256.331 750.92 221.622 750.92 171.888C750.92 122.154 785.144 86.7245 836.252 86.7245C887.362 86.7245 921.586 122.154 921.586 171.888ZM878.758 171.888C878.758 142.428 862.196 121.761 836.252 121.761C810.31 121.761 793.748 142.428 793.748 171.888C793.748 201.348 810.31 221.295 836.252 221.295C862.196 200.955 878.758 171.888Z" fill="white"/>
-        <path d="M1217.1 153.402V254.378H1174.92V159.044C1174.92 137.654 1164.18 124.007 1143.48 124.007C1117.92 124.007 1106.47 148.218 1106.47 168.492V254.378H1064.29V159.044C1064.29 137.654 1053.55 124.007 1032.85 124.007C1007.3 124.007 996.232 148.218 996.232 168.492V254.378H954.052V88.9705L986.529 87.5926C989.634 98.4842 991.704 116.331 991.704 123.679H992.028C999.986 103.34 1016.22 87.199 1044.88 87.199C1073.54 87.199 1093.6 101.896 1101.88 125.057C1109.51 103.996 1126.08 87.199 1155.45 87.199C1194.85 87.199 1216.97 114.887 1216.97 153.467L1217.1 153.402Z" fill="white"/>
-        <path d="M1382.9 203.382L1404.32 226.871C1391.89 243.34 1368.02 256.331 1335.22 256.331C1280.94 256.331 1248.14 221.622 1248.14 171.888C1248.14 122.154 1280.62 86.7245 1330.76 86.7245C1380.9 86.7245 1405.74 119.99 1405.74 164.54C1405.74 175.038 1403.99 181.731 1403.99 181.731H1290.64C1294.47 206.27 1311.02 223.066 1339.75 223.066C1363.24 223.066 1376.04 211.846 1382.96 203.448L1382.9 203.382ZM1290.64 157.454H1366.02C1365.7 135.736 1352.17 119.924 1330.76 119.924C1309.34 119.924 1294.47 134.294 1290.64 157.454Z" fill="white"/>
-        <path d="M1564.72 203.382L1586.13 226.871C1573.71 243.34 1549.84 256.331 1517.03 256.331C1462.76 256.331 1429.96 221.622 1429.96 171.888C1429.96 122.154 1462.44 86.7245 1512.57 86.7245C1562.72 86.7245 1587.55 119.99 1587.55 164.54C1587.55 175.038 1585.81 181.731 1585.81 181.731H1472.46C1476.28 206.27 1492.85 223.066 1521.56 223.066C1545.05 223.066 1557.86 211.846 1564.79 203.448L1564.72 203.382ZM1472.46 157.454H1547.83C1547.51 135.736 1533.99 119.924 1512.57 119.924C1491.15 119.924 1476.28 134.294 1472.46 157.454Z" fill="white"/>
-        <path d="M1660.46 86.9999L1650.6 69.5919H1646.38V86.9999H1637.42V42.3279H1654.18C1657.64 42.3279 1660.58 42.9465 1663.02 44.1839C1665.45 45.3785 1667.26 47.0212 1668.46 49.1119C1669.69 51.1599 1670.31 53.4639 1670.31 56.0239C1670.31 58.9679 1669.46 61.6345 1667.75 64.0239C1666.05 66.3705 1663.51 67.9919 1660.14 68.8879L1670.82 86.9999H1660.46ZM1646.38 62.8719H1653.86C1656.3 62.8719 1658.11 62.2959 1659.3 61.1439C1660.5 59.9492 1661.1 58.3065 1661.1 56.2159C1661.1 54.1679 1660.5 52.5892 1659.3 51.4799C1658.11 50.3279 1656.3 49.7519 1653.86 49.7519H1646.38V62.8719Z" fill="white"/>
-        <path d="M1694 65C1694 42.9086 1676.09 25 1654 25C1631.91 25 1614 42.9086 1614 65C1614 87.0914 1631.91 105 1654 105C1676.09 105 1694 87.0914 1694 65ZM1702 65C1702 91.5097 1680.51 113 1654 113C1627.49 113 1606 91.5097 1606 65C1606 38.4903 1627.49 17 1654 17C1680.51 17 1702 38.4903 1702 65Z" fill="white"/>
+        <path d="M165.378 198.685C164.99 198.685 164.537 198.685 164.149 198.62C110.711 192.518 93.0496 170.8 87.2917 158.466C78.8167 140.224 83.2159 121.394 98.5487 110.372C112.523 100.333 130.766 101.12 141.895 112.274C146.229 116.605 146.294 123.757 142.024 128.152C137.753 132.548 130.703 132.614 126.367 128.283C122.356 124.281 115.757 125.462 111.358 128.677C108.318 130.843 101.913 137.206 107.347 148.886C110.258 155.119 121.063 169.62 159.815 175.393C180.064 141.34 175.859 123.691 173.012 117.458C170.619 112.34 167.319 109.125 163.179 107.813C159.298 106.632 154.704 107.222 150.951 109.453C145.711 112.602 138.918 110.831 135.813 105.516C132.707 100.202 134.455 93.3125 139.695 90.1632C148.817 84.6517 159.815 83.2739 169.648 86.3577C176.764 88.5885 186.598 94.0998 193.003 107.878C198.761 120.279 204.066 147.836 174.695 193.567C172.624 196.783 169.13 198.685 165.443 198.685H165.378Z" fill="white"></path>
+        <path d="M182.923 284.948C177.554 284.948 172.572 281.405 170.89 275.893C168.884 269.136 172.636 261.984 179.235 259.95C221.093 246.959 252.6 211.922 261.398 168.487C267.803 136.796 261.656 104.515 244.124 77.5489C226.592 50.5825 199.744 32.1456 168.496 25.5844C161.703 24.1409 157.304 17.383 158.727 10.4937C160.151 3.60443 166.75 -0.85719 173.607 0.586272C211.389 8.45969 243.93 30.8333 265.15 63.508C286.37 96.1828 293.81 135.288 286.046 173.67C275.372 226.291 237.266 268.742 186.611 284.423C185.382 284.816 184.152 285.014 182.923 285.014V284.948Z" fill="white"></path>
+        <path d="M117.96 288C117.119 288 116.278 287.934 115.437 287.737C77.6551 279.864 45.1137 257.556 23.8938 224.815C2.67386 192.142 -4.76604 153.036 2.99733 114.653C14.7718 56.39 59.6054 11.446 117.184 0.226364C124.041 -1.08587 130.64 3.4413 131.935 10.3305C133.228 17.2854 128.764 23.9778 121.971 25.2901C74.4204 34.6069 37.415 71.6777 27.6461 119.837C21.2413 151.528 27.3872 183.809 44.9196 210.775C62.4518 237.742 89.3002 256.178 120.547 262.739C127.341 264.182 131.741 270.941 130.317 277.83C129.088 283.866 123.847 288 118.025 288H117.96Z" fill="white"></path>
+        <path d="M58.8323 136.393C57.9266 136.393 57.0208 136.262 56.1152 136.066C49.5809 134.556 45.5052 127.93 47.0578 121.303C53.0745 94.861 68.86 72.4218 91.5679 58.0527C114.211 43.6838 141.059 39.1566 167.132 45.2584C202.843 53.6568 231.179 81.0825 241.013 116.972C242.824 123.534 239.072 130.291 232.602 132.128C226.134 133.966 219.47 130.094 217.658 123.599C210.218 96.4357 188.74 75.6367 161.632 69.2724C141.901 64.614 121.586 68.0914 104.378 78.983C87.2334 89.8746 75.2648 106.868 70.6715 126.88C69.3775 132.588 64.3961 136.393 58.8323 136.393Z" fill="white"></path>
+        <path d="M144.457 245.68C137.018 245.68 129.448 244.828 121.944 243.055C82.3504 233.804 52.4614 201.523 45.7331 160.909C44.6333 154.217 49.0973 147.853 55.6961 146.737C62.295 145.622 68.5704 150.149 69.6702 156.841C74.7811 187.614 97.4243 212.021 127.378 219.042C168.136 228.556 208.893 202.704 218.339 161.435C219.826 154.807 226.361 150.674 232.895 152.249C239.429 153.758 243.505 160.385 241.953 167.011C231.278 213.858 190.003 245.68 144.457 245.68Z" fill="white"></path>
+        <path d="M436.702 188.382H420.788V259.505H378.607V12.0173H420.788V155.38H441.167L488.2 94.0321H536.267L472.349 172.897L543.191 259.44H491.693L436.767 188.316L436.702 188.382Z" fill="white"></path>
+        <path d="M720.165 152.598V254.231H677.984V158.57C677.984 137.18 666.921 123.14 646.219 123.14C619.241 123.14 607.143 147.678 607.143 168.346V254.231H564.962V88.824L597.439 87.4462C600.544 98.9939 602.615 116.184 602.615 123.533H603.65C611.93 103.587 628.557 86.7245 658.252 86.7245C698.362 86.7245 720.101 114.413 720.101 152.598H720.165Z" fill="white"></path>
+        <path d="M921.586 171.888C921.586 221.688 887.75 256.331 836.252 256.331C784.756 256.331 750.92 221.622 750.92 171.888C750.92 122.154 785.144 86.7245 836.252 86.7245C887.362 86.7245 921.586 122.154 921.586 171.888ZM878.758 171.888C878.758 142.428 862.196 121.761 836.252 121.761C810.31 121.761 793.748 142.428 793.748 171.888C793.748 201.348 810.31 221.295 836.252 221.295C862.196 200.955 878.758 171.888Z" fill="white"></path>
+        <path d="M1217.1 153.402V254.378H1174.92V159.044C1174.92 137.654 1164.18 124.007 1143.48 124.007C1117.92 124.007 1106.47 148.218 1106.47 168.492V254.378H1064.29V159.044C1064.29 137.654 1053.55 124.007 1032.85 124.007C1007.3 124.007 996.232 148.218 996.232 168.492V254.378H954.052V88.9705L986.529 87.5926C989.634 98.4842 991.704 116.331 991.704 123.679H992.028C999.986 103.34 1016.22 87.199 1044.88 87.199C1073.54 87.199 1093.6 101.896 1101.88 125.057C1109.51 103.996 1126.08 87.199 1155.45 87.199C1194.85 87.199 1216.97 114.887 1216.97 153.467L1217.1 153.402Z" fill="white"></path>
+        <path d="M1382.9 203.382L1404.32 226.871C1391.89 243.34 1368.02 256.331 1335.22 256.331C1280.94 256.331 1248.14 221.622 1248.14 171.888C1248.14 122.154 1280.62 86.7245 1330.76 86.7245C1380.9 86.7245 1405.74 119.99 1405.74 164.54C1405.74 175.038 1403.99 181.731 1403.99 181.731H1290.64C1294.47 206.27 1311.02 223.066 1339.75 223.066C1363.24 223.066 1376.04 211.846 1382.96 203.448L1382.9 203.382ZM1290.64 157.454H1366.02C1365.7 135.736 1352.17 119.924 1330.76 119.924C1309.34 119.924 1294.47 134.294 1290.64 157.454Z" fill="white"></path>
+        <path d="M1564.72 203.382L1586.13 226.871C1573.71 243.34 1549.84 256.331 1517.03 256.331C1462.76 256.331 1429.96 221.622 1429.96 171.888C1429.96 122.154 1462.44 86.7245 1512.57 86.7245C1562.72 86.7245 1587.55 119.99 1587.55 164.54C1587.55 175.038 1585.81 181.731 1585.81 181.731H1472.46C1476.28 206.27 1492.85 223.066 1521.56 223.066C1545.05 223.066 1557.86 211.846 1564.79 203.448L1564.72 203.382ZM1472.46 157.454H1547.83C1547.51 135.736 1533.99 119.924 1512.57 119.924C1491.15 119.924 1476.28 134.294 1472.46 157.454Z" fill="white"></path>
+        <path d="M1660.46 86.9999L1650.6 69.5919H1646.38V86.9999H1637.42V42.3279H1654.18C1657.64 42.3279 1660.58 42.9465 1663.02 44.1839C1665.45 45.3785 1667.26 47.0212 1668.46 49.1119C1669.69 51.1599 1670.31 53.4639 1670.31 56.0239C1670.31 58.9679 1669.46 61.6345 1667.75 64.0239C1666.05 66.3705 1663.51 67.9919 1660.14 68.8879L1670.82 86.9999H1660.46ZM1646.38 62.8719H1653.86C1656.3 62.8719 1658.11 62.2959 1659.3 61.1439C1660.5 59.9492 1661.1 58.3065 1661.1 56.2159C1661.1 54.1679 1660.5 52.5892 1659.3 51.4799C1658.11 50.3279 1656.3 49.7519 1653.86 49.7519H1646.38V62.8719Z" fill="white"></path>
+        <path d="M1694 65C1694 42.9086 1676.09 25 1654 25C1631.91 25 1614 42.9086 1614 65C1614 87.0914 1631.91 105 1654 105C1676.09 105 1694 87.0914 1694 65ZM1702 65C1702 91.5097 1680.51 113 1654 113C1627.49 113 1606 91.5097 1606 65C1606 38.4903 1627.49 17 1654 17C1680.51 17 1702 38.4903 1702 65Z" fill="white"></path>
       </svg>
       <span class="navbar-logo-advisor">Advisor</span>
     </div>
@@ -472,20 +743,30 @@
           <span class="nav-icon">
             <!-- Solid gear: 6-tooth star polygon + transparent center hole (evenodd) -->
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"
-                d="M17 9L14.2 12L13 15.93L9 15L5 15.93L3.8 12L1 9L3.8 6L5 2.07L9 3L13 2.07L14.2 6Z
-                   M6 9A3 3 0 1 0 12 9A3 3 0 1 0 6 9Z"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M17 9L14.2 12L13 15.93L9 15L5 15.93L3.8 12L1 9L3.8 6L5 2.07L9 3L13 2.07L14.2 6Z
+                   M6 9A3 3 0 1 0 12 9A3 3 0 1 0 6 9Z"></path>
             </svg>
           </span>
           General
+        </button>
+        <button class="nav-item" data-tab="customization" onclick="switchTab('customization')">
+          <span class="nav-icon">
+            <!-- Text/lines icon representing copy -->
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="3" width="14" height="2" rx="1" fill="currentColor"></rect>
+              <rect x="2" y="7" width="10" height="2" rx="1" fill="currentColor"></rect>
+              <rect x="2" y="11" width="12" height="2" rx="1" fill="currentColor"></rect>
+              <rect x="2" y="15" width="7" height="2" rx="1" fill="currentColor"></rect>
+            </svg>
+          </span>
+          Site Customization
         </button>
         <button class="nav-item" data-tab="prospects" onclick="switchTab('prospects')">
           <span class="nav-icon">
             <!-- Solid megaphone/bullhorn with white sound waves -->
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill="currentColor" d="M2.5 7H5L13 3V15L5 11H2.5C2.22 11 2 10.78 2 10.5V7.5C2 7.22 2.22 7 2.5 7Z"/>
-              <path stroke="white" stroke-width="1.5" stroke-linecap="round"
-                d="M15 6.5A3.5 3.5 0 0 1 15 11.5"/>
+              <path fill="currentColor" d="M2.5 7H5L13 3V15L5 11H2.5C2.22 11 2 10.78 2 10.5V7.5C2 7.22 2.22 7 2.5 7Z"></path>
+              <path stroke="white" stroke-width="1.5" stroke-linecap="round" d="M15 6.5A3.5 3.5 0 0 1 15 11.5"></path>
             </svg>
           </span>
           Marketing
@@ -494,11 +775,10 @@
           <span class="nav-icon">
             <!-- Solid palette with transparent color dots (evenodd) -->
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"
-                d="M9 2C5.13 2 2 5.13 2 9c0 3.87 3.13 7 7 7 .85 0 1.5-.35 1.5-.9 0-.35-.18-.67-.47-.92a1.44 1.44 0 0 1-.53-1.08C9.5 12.27 10.17 11.5 11 11.5H12c2.21 0 4-1.79 4-4.25C16 4.85 12.87 2 9 2z
+              <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M9 2C5.13 2 2 5.13 2 9c0 3.87 3.13 7 7 7 .85 0 1.5-.35 1.5-.9 0-.35-.18-.67-.47-.92a1.44 1.44 0 0 1-.53-1.08C9.5 12.27 10.17 11.5 11 11.5H12c2.21 0 4-1.79 4-4.25C16 4.85 12.87 2 9 2z
                    M4.5 9A1 1 0 1 0 6.5 9A1 1 0 1 0 4.5 9Z
                    M6.5 5.5A1 1 0 1 0 8.5 5.5A1 1 0 1 0 6.5 5.5Z
-                   M10.5 5.5A1 1 0 1 0 12.5 5.5A1 1 0 1 0 10.5 5.5Z"/>
+                   M10.5 5.5A1 1 0 1 0 12.5 5.5A1 1 0 1 0 10.5 5.5Z"></path>
             </svg>
           </span>
           Branding
@@ -507,11 +787,11 @@
           <span class="nav-icon">
             <!-- Solid shield with white transparent check -->
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill="currentColor" d="M9 1.5L2.5 4.5V9.5C2.5 13.5 5.5 17 9 17.5C12.5 17 15.5 13.5 15.5 9.5V4.5L9 1.5Z"/>
-              <path stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M6 9.5L8 11.5L12 7.5"/>
+              <path fill="currentColor" d="M9 1.5L2.5 4.5V9.5C2.5 13.5 5.5 17 9 17.5C12.5 17 15.5 13.5 15.5 9.5V4.5L9 1.5Z"></path>
+              <path stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M6 9.5L8 11.5L12 7.5"></path>
             </svg>
           </span>
-          Privacy & Compliance
+          Privacy &amp; Compliance
         </button>
       </nav>
     </aside>
@@ -527,26 +807,126 @@
 
         <div class="field-group">
           <label for="org-name">Name</label>
-          <input type="text" id="org-name" value="Acme" placeholder="Organization name"
-            oninput="updateSlug(this.value)" />
+          <input type="text" id="org-name" value="Acme" placeholder="Organization name" oninput="updateSlug(this.value)">
         </div>
 
         <div class="field-group">
           <label for="org-slug">Slug Name</label>
-          <input type="text" id="org-slug" value="acme" readonly />
+          <input type="text" id="org-slug" value="acme" readonly="">
         </div>
 
         <div class="field-group">
           <label for="scheduling-link">Scheduling Link</label>
-          <input type="url" id="scheduling-link" value="https://AcmeAdvisors.com/schedule" placeholder="https://..." />
+          <input type="url" id="scheduling-link" value="https://AcmeAdvisors.com/schedule" placeholder="https://...">
         </div>
 
         <div class="field-group">
           <label for="org-start-page">Org Start Page</label>
-          <input type="url" id="org-start-page" value="https://AcmeAdvisors.com/dashboard" placeholder="https://..." />
+          <input type="url" id="org-start-page" value="https://AcmeAdvisors.com/dashboard" placeholder="https://...">
         </div>
 
-        <button class="btn-save">Save Changes</button>
+        <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
+      </section>
+
+      <!-- Site Customization Tab -->
+      <section id="tab-customization" class="tab-panel">
+        <div class="main-header">
+          <h2>Site Customization</h2>
+        </div>
+
+        <!-- Version A -->
+        <div class="version-block">
+          <div class="version-block-header">
+            <span class="version-badge version-badge-a">Version A</span>
+            <span class="version-default-tag">Default</span>
+          </div>
+          <div class="field-group">
+            <label for="va-header">Landing Page Header</label>
+            <input type="text" id="va-header" value="Wealth is about experiencing life fully." placeholder="Enter your main heading…" oninput="updatePreview()">
+          </div>
+          <div class="field-group">
+            <label for="va-subtext">Landing Page Header Subtext</label>
+            <textarea id="va-subtext" rows="2" placeholder="Enter supporting subtext…" oninput="updatePreview()">Take a few minutes to get clear on what matters most and what your money is really for.</textarea>
+          </div>
+        </div>
+
+        <!-- Version B -->
+        <div class="version-block">
+          <div class="version-block-header">
+            <span class="version-badge version-badge-b">Version B</span>
+          </div>
+          <div class="field-group">
+            <label for="vb-header">Landing Page Header</label>
+            <input type="text" id="vb-header" placeholder="Enter an alternative heading…" oninput="updatePreview()">
+          </div>
+          <div class="field-group">
+            <label for="vb-subtext">Landing Page Header Subtext</label>
+            <textarea id="vb-subtext" rows="2" placeholder="Enter alternative subtext…" oninput="updatePreview()"></textarea>
+          </div>
+        </div>
+
+        <!-- Live Landing Page Preview -->
+        <div class="preview-wrapper">
+          <div class="preview-toolbar">
+            <span class="preview-label">Landing Page Preview</span>
+            <div class="preview-version-btns">
+              <button class="preview-version-btn active" id="pvbtn-a" onclick="setPreviewVersion('a')">Version A</button>
+              <button class="preview-version-btn" id="pvbtn-b" onclick="setPreviewVersion('b')">Version B</button>
+            </div>
+          </div>
+          <div class="preview-scale-outer">
+            <div class="lp-preview" id="lp-preview" style="--lp-primary: #240446; --lp-accent: #7639A1;">
+              <div class="lp-nav">
+                <div class="lp-nav-knomee">
+                  <svg width="1702" height="288" viewBox="0 0 1702 288" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M165.378 198.685C164.99 198.685 164.537 198.685 164.149 198.62C110.711 192.518 93.0496 170.8 87.2917 158.466C78.8167 140.224 83.2159 121.394 98.5487 110.372C112.523 100.333 130.766 101.12 141.895 112.274C146.229 116.605 146.294 123.757 142.024 128.152C137.753 132.548 130.703 132.614 126.367 128.283C122.356 124.281 115.757 125.462 111.358 128.677C108.318 130.843 101.913 137.206 107.347 148.886C110.258 155.119 121.063 169.62 159.815 175.393C180.064 141.34 175.859 123.691 173.012 117.458C170.619 112.34 167.319 109.125 163.179 107.813C159.298 106.632 154.704 107.222 150.951 109.453C145.711 112.602 138.918 110.831 135.813 105.516C132.707 100.202 134.455 93.3125 139.695 90.1632C148.817 84.6517 159.815 83.2739 169.648 86.3577C176.764 88.5885 186.598 94.0998 193.003 107.878C198.761 120.279 204.066 147.836 174.695 193.567C172.624 196.783 169.13 198.685 165.443 198.685H165.378Z" fill="white"></path>
+                    <path d="M182.923 284.948C177.554 284.948 172.572 281.405 170.89 275.893C168.884 269.136 172.636 261.984 179.235 259.95C221.093 246.959 252.6 211.922 261.398 168.487C267.803 136.796 261.656 104.515 244.124 77.5489C226.592 50.5825 199.744 32.1456 168.496 25.5844C161.703 24.1409 157.304 17.383 158.727 10.4937C160.151 3.60443 166.75 -0.85719 173.607 0.586272C211.389 8.45969 243.93 30.8333 265.15 63.508C286.37 96.1828 293.81 135.288 286.046 173.67C275.372 226.291 237.266 268.742 186.611 284.423C185.382 284.816 184.152 285.014 182.923 285.014V284.948Z" fill="white"></path>
+                    <path d="M117.96 288C117.119 288 116.278 287.934 115.437 287.737C77.6551 279.864 45.1137 257.556 23.8938 224.815C2.67386 192.142 -4.76604 153.036 2.99733 114.653C14.7718 56.39 59.6054 11.446 117.184 0.226364C124.041 -1.08587 130.64 3.4413 131.935 10.3305C133.228 17.2854 128.764 23.9778 121.971 25.2901C74.4204 34.6069 37.415 71.6777 27.6461 119.837C21.2413 151.528 27.3872 183.809 44.9196 210.775C62.4518 237.742 89.3002 256.178 120.547 262.739C127.341 264.182 131.741 270.941 130.317 277.83C129.088 283.866 123.847 288 118.025 288H117.96Z" fill="white"></path>
+                    <path d="M58.8323 136.393C57.9266 136.393 57.0208 136.262 56.1152 136.066C49.5809 134.556 45.5052 127.93 47.0578 121.303C53.0745 94.861 68.86 72.4218 91.5679 58.0527C114.211 43.6838 141.059 39.1566 167.132 45.2584C202.843 53.6568 231.179 81.0825 241.013 116.972C242.824 123.534 239.072 130.291 232.602 132.128C226.134 133.966 219.47 130.094 217.658 123.599C210.218 96.4357 188.74 75.6367 161.632 69.2724C141.901 64.614 121.586 68.0914 104.378 78.983C87.2334 89.8746 75.2648 106.868 70.6715 126.88C69.3775 132.588 64.3961 136.393 58.8323 136.393Z" fill="white"></path>
+                    <path d="M144.457 245.68C137.018 245.68 129.448 244.828 121.944 243.055C82.3504 233.804 52.4614 201.523 45.7331 160.909C44.6333 154.217 49.0973 147.853 55.6961 146.737C62.295 145.622 68.5704 150.149 69.6702 156.841C74.7811 187.614 97.4243 212.021 127.378 219.042C168.136 228.556 208.893 202.704 218.339 161.435C219.826 154.807 226.361 150.674 232.895 152.249C239.429 153.758 243.505 160.385 241.953 167.011C231.278 213.858 190.003 245.68 144.457 245.68Z" fill="white"></path>
+                    <path d="M436.702 188.382H420.788V259.505H378.607V12.0173H420.788V155.38H441.167L488.2 94.0321H536.267L472.349 172.897L543.191 259.44H491.693L436.767 188.316L436.702 188.382Z" fill="white"></path>
+                    <path d="M720.165 152.598V254.231H677.984V158.57C677.984 137.18 666.921 123.14 646.219 123.14C619.241 123.14 607.143 147.678 607.143 168.346V254.231H564.962V88.824L597.439 87.4462C600.544 98.9939 602.615 116.184 602.615 123.533H603.65C611.93 103.587 628.557 86.7245 658.252 86.7245C698.362 86.7245 720.101 114.413 720.101 152.598H720.165Z" fill="white"></path>
+                    <path d="M921.586 171.888C921.586 221.688 887.75 256.331 836.252 256.331C784.756 256.331 750.92 221.622 750.92 171.888C750.92 122.154 785.144 86.7245 836.252 86.7245C887.362 86.7245 921.586 122.154 921.586 171.888ZM878.758 171.888C878.758 142.428 862.196 121.761 836.252 121.761C810.31 121.761 793.748 142.428 793.748 171.888C793.748 201.348 810.31 221.295 836.252 221.295C862.196 200.955 878.758 171.888Z" fill="white"></path>
+                    <path d="M1217.1 153.402V254.378H1174.92V159.044C1174.92 137.654 1164.18 124.007 1143.48 124.007C1117.92 124.007 1106.47 148.218 1106.47 168.492V254.378H1064.29V159.044C1064.29 137.654 1053.55 124.007 1032.85 124.007C1007.3 124.007 996.232 148.218 996.232 168.492V254.378H954.052V88.9705L986.529 87.5926C989.634 98.4842 991.704 116.331 991.704 123.679H992.028C999.986 103.34 1016.22 87.199 1044.88 87.199C1073.54 87.199 1093.6 101.896 1101.88 125.057C1109.51 103.996 1126.08 87.199 1155.45 87.199C1194.85 87.199 1216.97 114.887 1216.97 153.467L1217.1 153.402Z" fill="white"></path>
+                    <path d="M1382.9 203.382L1404.32 226.871C1391.89 243.34 1368.02 256.331 1335.22 256.331C1280.94 256.331 1248.14 221.622 1248.14 171.888C1248.14 122.154 1280.62 86.7245 1330.76 86.7245C1380.9 86.7245 1405.74 119.99 1405.74 164.54C1405.74 175.038 1403.99 181.731 1403.99 181.731H1290.64C1294.47 206.27 1311.02 223.066 1339.75 223.066C1363.24 223.066 1376.04 211.846 1382.96 203.448L1382.9 203.382ZM1290.64 157.454H1366.02C1365.7 135.736 1352.17 119.924 1330.76 119.924C1309.34 119.924 1294.47 134.294 1290.64 157.454Z" fill="white"></path>
+                    <path d="M1564.72 203.382L1586.13 226.871C1573.71 243.34 1549.84 256.331 1517.03 256.331C1462.76 256.331 1429.96 221.622 1429.96 171.888C1429.96 122.154 1462.44 86.7245 1512.57 86.7245C1562.72 86.7245 1587.55 119.99 1587.55 164.54C1587.55 175.038 1585.81 181.731 1585.81 181.731H1472.46C1476.28 206.27 1492.85 223.066 1521.56 223.066C1545.05 223.066 1557.86 211.846 1564.79 203.448L1564.72 203.382ZM1472.46 157.454H1547.83C1547.51 135.736 1533.99 119.924 1512.57 119.924C1491.15 119.924 1476.28 134.294 1472.46 157.454Z" fill="white"></path>
+                    <path d="M1660.46 86.9999L1650.6 69.5919H1646.38V86.9999H1637.42V42.3279H1654.18C1657.64 42.3279 1660.58 42.9465 1663.02 44.1839C1665.45 45.3785 1667.26 47.0212 1668.46 49.1119C1669.69 51.1599 1670.31 53.4639 1670.31 56.0239C1670.31 58.9679 1669.46 61.6345 1667.75 64.0239C1666.05 66.3705 1663.51 67.9919 1660.14 68.8879L1670.82 86.9999H1660.46ZM1646.38 62.8719H1653.86C1656.3 62.8719 1658.11 62.2959 1659.3 61.1439C1660.5 59.9492 1661.1 58.3065 1661.1 56.2159C1661.1 54.1679 1660.5 52.5892 1659.3 51.4799C1658.11 50.3279 1656.3 49.7519 1653.86 49.7519H1646.38V62.8719Z" fill="white"></path>
+                    <path d="M1694 65C1694 42.9086 1676.09 25 1654 25C1631.91 25 1614 42.9086 1614 65C1614 87.0914 1631.91 105 1654 105C1676.09 105 1694 87.0914 1694 65ZM1702 65C1702 91.5097 1680.51 113 1654 113C1627.49 113 1606 91.5097 1606 65C1606 38.4903 1627.49 17 1654 17C1680.51 17 1702 38.4903 1702 65Z" fill="white"></path>
+                  </svg>
+                  <span class="lp-nav-knomee-advisor">Advisor</span>
+                </div>
+                <div class="lp-nav-org" id="preview-org-name" style="font-family: Inter, Poppins, sans-serif; font-weight: 400; font-style: normal;">ACME</div>
+              </div>
+              <div class="lp-body">
+                <div class="lp-welcome">Welcome!</div>
+                <div class="lp-header" id="preview-header">Wealth is about experiencing life fully.</div>
+                <div class="lp-subtext" id="preview-subtext">Take a few minutes to get clear on what matters most and what your money is really for.</div>
+                <div class="lp-cards-label">What you'll get:</div>
+                <div class="lp-cards">
+                  <div class="lp-card">
+                    <div class="lp-card-icon">⚡</div>
+                    <div class="lp-card-title">Discover What Matters Most</div>
+                    <div class="lp-card-desc">A quick, guided experience that clarifies your values, goals, and priorities.</div>
+                  </div>
+                  <div class="lp-card">
+                    <div class="lp-card-icon">💡</div>
+                    <div class="lp-card-title">See Your Personal Insights</div>
+                    <div class="lp-card-desc">Receive a personalized summary of what's driving your financial decisions.</div>
+                  </div>
+                  <div class="lp-card">
+                    <div class="lp-card-icon">✦</div>
+                    <div class="lp-card-title">Get Your 3 Most Important Money Questions</div>
+                    <div class="lp-card-desc">Walk away with questions to help you think, plan, and prepare for what's next.</div>
+                  </div>
+                </div>
+                <button class="lp-cta">Discover Financial Joy</button>
+                <div class="lp-est">🕐 Est time: 8 min</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
       </section>
 
       <!-- Marketing Tab -->
@@ -559,70 +939,70 @@
           <p class="section-label">Allowed Prospect UTM Keys</p>
           <div class="checkbox-grid">
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Where traffic came from</span>
                 <span class="utm-key">utm_source</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Marketing channel type</span>
                 <span class="utm-key">utm_medium</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Campaign name identifier</span>
                 <span class="utm-key">utm_campaign</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Paid keyword targeted</span>
                 <span class="utm-key">utm_term</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Ad creative variant</span>
                 <span class="utm-key">utm_content</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Unique campaign ID</span>
                 <span class="utm-key">utm_id</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">First page visited</span>
                 <span class="utm-key">landing_page_url</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Referring website URL</span>
                 <span class="utm-key">referrer_url</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">First visit timestamp</span>
                 <span class="utm-key">first_touch_at</span>
               </span>
             </label>
             <label class="checkbox-item">
-              <input type="checkbox" />
+              <input type="checkbox">
               <span class="utm-label">
                 <span class="utm-desc">Latest visit timestamp</span>
                 <span class="utm-key">last_touch_at</span>
@@ -631,10 +1011,8 @@
           </div>
           <div class="custom-key-group">
             <div class="custom-key-fields">
-              <input type="text" id="custom-key" placeholder="custom_key"
-                onkeydown="if(event.key==='Enter')addCustomKey()" />
-              <input type="text" id="custom-key-desc" placeholder="Brief description (3–5 words)"
-                onkeydown="if(event.key==='Enter')addCustomKey()" />
+              <input type="text" id="custom-key" placeholder="custom_key" onkeydown="if(event.key==='Enter')addCustomKey()">
+              <input type="text" id="custom-key-desc" placeholder="Brief description (3–5 words)" onkeydown="if(event.key==='Enter')addCustomKey()">
             </div>
             <button class="btn-add" onclick="addCustomKey()">Add</button>
           </div>
@@ -645,14 +1023,14 @@
         <div>
           <p class="section-label">Prospect Visibility — Advisors</p>
           <div class="advisors-box">
-            <label class="checkbox-item"><input type="checkbox" /> Advisor Test</label>
-            <label class="checkbox-item"><input type="checkbox" /> New Advisor</label>
-            <label class="checkbox-item"><input type="checkbox" /> Taylor Fah</label>
+            <label class="checkbox-item"><input type="checkbox"> Advisor Test</label>
+            <label class="checkbox-item"><input type="checkbox"> New Advisor</label>
+            <label class="checkbox-item"><input type="checkbox"> Taylor Fah</label>
           </div>
         </div>
 
 
-        <button class="btn-save">Save Changes</button>
+        <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
       </section>
 
       <!-- Branding Tab -->
@@ -666,10 +1044,9 @@
             <label>Primary Color</label>
             <div class="color-input-wrap">
               <div class="color-swatch" id="swatch-primary" style="background:#240446;">
-                <input type="color" value="#240446" oninput="updateColor('primary', this.value)" />
+                <input type="color" value="#240446" oninput="updateColor('primary', this.value)">
               </div>
-              <input class="color-hex" id="hex-primary" type="text" value="#240446" maxlength="7"
-                oninput="updateColorFromHex('primary', this.value)" />
+              <input class="color-hex" id="hex-primary" type="text" value="#240446" maxlength="7" oninput="updateColorFromHex('primary', this.value)">
             </div>
           </div>
 
@@ -677,10 +1054,9 @@
             <label>Accent Color</label>
             <div class="color-input-wrap">
               <div class="color-swatch" id="swatch-accent" style="background:#7639A1;">
-                <input type="color" value="#7639A1" oninput="updateColor('accent', this.value)" />
+                <input type="color" value="#7639A1" oninput="updateColor('accent', this.value)">
               </div>
-              <input class="color-hex" id="hex-accent" type="text" value="#7639A1" maxlength="7"
-                oninput="updateColorFromHex('accent', this.value)" />
+              <input class="color-hex" id="hex-accent" type="text" value="#7639A1" maxlength="7" oninput="updateColorFromHex('accent', this.value)">
             </div>
           </div>
         </div>
@@ -688,25 +1064,23 @@
         <div class="font-row">
           <div class="font-field">
             <label for="font-family">Font Family</label>
-            <input type="text" id="font-family" list="font-family-list" value="Inter"
-              placeholder="Search Google Fonts…" oninput="updateFontPreview()" autocomplete="off" />
-            <datalist id="font-family-list"></datalist>
+            <input type="text" id="font-family" value="Inter" placeholder="Search Google Fonts…" autocomplete="off" oninput="filterFontDropdown('font-family'); updateFontPreview()" onfocus="openFontDropdown('font-family')" onblur="closeFontDropdown('font-family')" style="font-family: Inter, Poppins, sans-serif; font-weight: 400; font-style: normal;">
+            <div class="custom-dropdown" id="dd-font-family"></div>
           </div>
           <div class="font-field">
             <label for="font-type">Font Type</label>
-            <input type="text" id="font-type" list="font-type-list" value="Regular"
-              placeholder="e.g. Regular, Bold…" oninput="updateFontPreview()" autocomplete="off" />
-            <datalist id="font-type-list"></datalist>
+            <input type="text" id="font-type" value="Regular" placeholder="e.g. Regular, Bold…" autocomplete="off" oninput="filterFontDropdown('font-type'); updateFontPreview()" onfocus="openFontDropdown('font-type')" onblur="closeFontDropdown('font-type')" style="font-family: Inter, Poppins, sans-serif; font-weight: 400; font-style: normal;">
+            <div class="custom-dropdown" id="dd-font-type"></div>
           </div>
         </div>
 
-        <button class="btn-save">Save Changes</button>
+        <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
       </section>
 
       <!-- Privacy & Compliance Tab -->
       <section id="tab-compliance" class="tab-panel">
         <div class="main-header">
-          <h2>Privacy & Compliance</h2>
+          <h2>Privacy &amp; Compliance</h2>
         </div>
 
         <div class="field-group">
@@ -716,11 +1090,21 @@
         </div>
 
 
-        <button class="btn-save">Save Changes</button>
+        <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
       </section>
 
     </main>
     </div>
+  </div>
+
+  <!-- Save toast -->
+  <div class="save-toast" id="save-toast">
+    <div class="save-toast-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.5 9.5L7.5 13.5L14.5 5.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <span class="save-toast-text">Changes saved!</span>
   </div>
 
   <script>
@@ -762,36 +1146,29 @@
       'Work Sans','Yanone Kaffeesatz','Young Serif','Yrsa','Zilla Slab'
     ];
 
-    // ── Font Family datalist — load all Google Fonts ──
+    // ── Font Family — load all Google Fonts into custom dropdown ──
+    const _fontFamilies = [];
+    const _fontTypeOptions = {};
+
     function initFontFamilyList() {
-      const dl = document.getElementById('font-family-list');
       fetch('https://fonts.google.com/metadata/fonts')
         .then(r => r.text())
         .then(txt => {
-          // Strip XSSI prefix )]}'
-          const json = txt.replace(/^\)\]\}'\n?/, '');
+          const json = txt.replace(/^\)\]\}'\
+?/, '');
           const data = JSON.parse(json);
           const families = (data.familyMetadataList || []).map(f => f.family);
-          _populateFamilyDl(dl, families);
+          _fontFamilies.length = 0;
+          _fontFamilies.push(...families);
         })
-        .catch(() => _populateFamilyDl(dl, GF_POPULAR));
+        .catch(() => { _fontFamilies.length = 0; _fontFamilies.push(...GF_POPULAR); });
     }
 
-    function _populateFamilyDl(dl, families) {
-      dl.innerHTML = '';
-      families.forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        dl.appendChild(opt);
-      });
-    }
-
-    // ── Font Type datalist — variants actually available for the chosen family ──
+    // ── Font Type — variants for chosen family ──
     const _typeCache = {};
     function updateFontTypeList(family) {
       if (!family) return;
-      const dl = document.getElementById('font-type-list');
-      if (_typeCache[family]) { _renderTypeDl(dl, _typeCache[family]); return; }
+      if (_typeCache[family]) { _fontTypeOptions[family] = _typeCache[family]; return; }
       const allWeights = '0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;' +
                          '1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900';
       const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:ital,wght@${allWeights}&display=swap`;
@@ -809,29 +1186,87 @@
             const key = styleM[1] + '_' + weightM[1];
             if (seen.has(key)) continue;
             seen.add(key);
-            variants.push({ style: styleM[1], weight: parseInt(weightM[1]) });
+            const wName = WEIGHT_NAMES[parseInt(weightM[1])] || ('Weight ' + weightM[1]);
+            const label = styleM[1] === 'italic'
+              ? (wName === 'Regular' ? 'Italic' : wName + ' Italic') : wName;
+            variants.push(label);
           }
-          // normal variants first (by weight), then italic (by weight)
-          variants.sort((a, b) =>
-            a.style !== b.style ? (a.style === 'normal' ? -1 : 1) : a.weight - b.weight
-          );
+          variants.sort((a, b) => {
+            const order = ['Thin','Extra Light','Light','Regular','Medium','Semi Bold','Bold','Extra Bold','Black'];
+            const ai = order.findIndex(o => a.startsWith(o));
+            const bi = order.findIndex(o => b.startsWith(o));
+            const aItalic = a.includes('Italic') ? 1 : 0;
+            const bItalic = b.includes('Italic') ? 1 : 0;
+            return (ai === bi ? aItalic - bItalic : (ai < 0 ? 1 : bi < 0 ? -1 : ai - bi));
+          });
           _typeCache[family] = variants;
-          _renderTypeDl(dl, variants);
+          _fontTypeOptions[family] = variants;
         })
-        .catch(() => {}); // keep current list on error
+        .catch(() => {});
     }
 
-    function _renderTypeDl(dl, variants) {
-      dl.innerHTML = '';
-      variants.forEach(v => {
-        const wName = WEIGHT_NAMES[v.weight] || ('Weight ' + v.weight);
-        const label = v.style === 'italic'
-          ? (wName === 'Regular' ? 'Italic' : wName + ' Italic')
-          : wName;
-        const opt = document.createElement('option');
-        opt.value = label;
-        dl.appendChild(opt);
-      });
+    // ── Custom dropdown logic ──
+    function _renderDropdown(ddId, items) {
+      const dd = document.getElementById(ddId);
+      if (!items.length) {
+        dd.innerHTML = '<div class="custom-dropdown-empty">No matches</div>';
+      } else {
+        dd.innerHTML = items.slice(0, 120).map(v =>
+          `<div class="custom-dropdown-item" onmousedown="selectFontItem('${ddId}','${v.replace(/'/g, "\\'")}')">${v}</div>`
+        ).join('');
+      }
+    }
+
+    function openFontDropdown(inputId) {
+      const ddId = 'dd-' + inputId;
+      let items;
+      if (inputId === 'font-family') {
+        items = _fontFamilies.length ? _fontFamilies : GF_POPULAR;
+      } else {
+        const family = document.getElementById('font-family').value.trim();
+        items = _fontTypeOptions[family] || _typeCache[family] || [];
+      }
+      _renderDropdown(ddId, items);
+      document.getElementById(ddId).classList.add('open');
+    }
+
+    function filterFontDropdown(inputId) {
+      const q = document.getElementById(inputId).value.trim().toLowerCase();
+      let items;
+      if (inputId === 'font-family') {
+        const all = _fontFamilies.length ? _fontFamilies : GF_POPULAR;
+        items = q ? all.filter(f => f.toLowerCase().includes(q)) : all;
+      } else {
+        const family = document.getElementById('font-family').value.trim();
+        const all = _fontTypeOptions[family] || _typeCache[family] || [];
+        items = q ? all.filter(f => f.toLowerCase().includes(q)) : all;
+      }
+      _renderDropdown('dd-' + inputId, items);
+      document.getElementById('dd-' + inputId).classList.add('open');
+    }
+
+    function closeFontDropdown(inputId) {
+      setTimeout(() => document.getElementById('dd-' + inputId).classList.remove('open'), 160);
+    }
+
+    function selectFontItem(ddId, value) {
+      const inputId = ddId.replace('dd-', '');
+      document.getElementById(inputId).value = value;
+      document.getElementById(ddId).classList.remove('open');
+      updateFontPreview();
+      if (inputId === 'font-family') updateFontTypeList(value);
+    }
+
+    // ── Save toast ──
+    let _toastTimer;
+    function showSaveModal() {
+      const t = document.getElementById('save-toast');
+      t.classList.add('visible');
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+    function hideSaveModal() {
+      document.getElementById('save-toast').classList.remove('visible');
     }
 
     // ── Font preview ──
@@ -872,11 +1307,13 @@
         el.style.fontWeight  = weight;
         el.style.fontStyle   = italic;
       });
+      updatePreview();
     }
     // init on load
     initFontFamilyList();
     updateFontTypeList('Inter');
     updateFontPreview();
+    updatePreview();
 
     function addCustomKey() {
       const keyEl  = document.getElementById('custom-key');
@@ -899,7 +1336,38 @@
       keyEl.focus();
     }
 
+    var _previewVersion = 'a';
+    function setPreviewVersion(v) {
+      _previewVersion = v;
+      document.getElementById('pvbtn-a').classList.toggle('active', v === 'a');
+      document.getElementById('pvbtn-b').classList.toggle('active', v === 'b');
+      updatePreview();
+    }
+    function updatePreview() {
+      const headerEl  = document.getElementById('preview-header');
+      const subtextEl = document.getElementById('preview-subtext');
+      const lp        = document.getElementById('lp-preview');
+      if (!headerEl || !lp) return;
+      const header  = document.getElementById(_previewVersion === 'a' ? 'va-header'  : 'vb-header').value.trim();
+      const subtext = document.getElementById(_previewVersion === 'a' ? 'va-subtext' : 'vb-subtext').value.trim();
+      headerEl.textContent  = header  || '';
+      subtextEl.textContent = subtext || '';
+      const primary = document.getElementById('hex-primary').value || '#240446';
+      const accent  = document.getElementById('hex-accent').value  || '#7639A1';
+      lp.style.setProperty('--lp-primary', primary);
+      lp.style.setProperty('--lp-accent',  accent);
+      const orgName = document.getElementById('org-name').value.trim() || 'Acme Advisors';
+      const orgNameEl = document.getElementById('preview-org-name');
+      orgNameEl.textContent = orgName;
+      const fontFamily = document.getElementById('font-family').value.trim() || 'Poppins';
+      const fontType   = document.getElementById('font-type').value.trim() || 'Regular';
+      orgNameEl.style.fontFamily  = `'${fontFamily}', 'Poppins', sans-serif`;
+      orgNameEl.style.fontWeight  = typeToWeight(fontType);
+      orgNameEl.style.fontStyle   = /italic/i.test(fontType) ? 'italic' : 'normal';
+    }
+
     function updateSlug(name) {
+      updatePreview();
       document.getElementById('org-slug').value = name
         .toLowerCase()
         .trim()
@@ -917,14 +1385,17 @@
     function updateColor(key, hex) {
       document.getElementById('swatch-' + key).style.background = hex;
       document.getElementById('hex-' + key).value = hex.toUpperCase();
+      updatePreview();
     }
 
     function updateColorFromHex(key, value) {
       if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
         document.getElementById('swatch-' + key).style.background = value;
         document.querySelector('#swatch-' + key + ' input[type=color]').value = value;
+        updatePreview();
       }
     }
   </script>
-</body>
-</html>
+
+
+</body></html>
