@@ -1154,8 +1154,7 @@
       fetch('https://fonts.google.com/metadata/fonts')
         .then(r => r.text())
         .then(txt => {
-          const json = txt.replace(/^\)\]\}'\
-?/, '');
+          const json = txt.replace(/^\)\]\}'\n?/, '');
           const data = JSON.parse(json);
           const families = (data.familyMetadataList || []).map(f => f.family);
           _fontFamilies.length = 0;
