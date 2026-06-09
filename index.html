@@ -508,6 +508,11 @@
     }
 
     /* ── Version blocks (Site Customization) ── */
+    .version-blocks-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
     .version-block {
       display: flex;
       flex-direction: column;
@@ -834,34 +839,36 @@
           <h2>Site Customization</h2>
         </div>
 
-        <!-- Version A -->
-        <div class="version-block">
-          <div class="version-block-header">
-            <span class="version-badge version-badge-a">Version A</span>
-            <span class="version-default-tag">Default</span>
+        <div class="version-blocks-row">
+          <!-- Version A -->
+          <div class="version-block">
+            <div class="version-block-header">
+              <span class="version-badge version-badge-a">Version A</span>
+              <span class="version-default-tag">Default</span>
+            </div>
+            <div class="field-group">
+              <label for="va-header">Landing Page Header</label>
+              <input type="text" id="va-header" value="Wealth is about experiencing life fully." placeholder="Enter your main heading…" oninput="updatePreview()">
+            </div>
+            <div class="field-group">
+              <label for="va-subtext">Landing Page Header Subtext</label>
+              <textarea id="va-subtext" rows="3" placeholder="Enter supporting subtext…" oninput="updatePreview()">Take a few minutes to get clear on what matters most and what your money is really for.</textarea>
+            </div>
           </div>
-          <div class="field-group">
-            <label for="va-header">Landing Page Header</label>
-            <input type="text" id="va-header" value="Wealth is about experiencing life fully." placeholder="Enter your main heading…" oninput="updatePreview()">
-          </div>
-          <div class="field-group">
-            <label for="va-subtext">Landing Page Header Subtext</label>
-            <textarea id="va-subtext" rows="2" placeholder="Enter supporting subtext…" oninput="updatePreview()">Take a few minutes to get clear on what matters most and what your money is really for.</textarea>
-          </div>
-        </div>
 
-        <!-- Version B -->
-        <div class="version-block">
-          <div class="version-block-header">
-            <span class="version-badge version-badge-b">Version B</span>
-          </div>
-          <div class="field-group">
-            <label for="vb-header">Landing Page Header</label>
-            <input type="text" id="vb-header" placeholder="Enter an alternative heading…" oninput="updatePreview()">
-          </div>
-          <div class="field-group">
-            <label for="vb-subtext">Landing Page Header Subtext</label>
-            <textarea id="vb-subtext" rows="2" placeholder="Enter alternative subtext…" oninput="updatePreview()"></textarea>
+          <!-- Version B -->
+          <div class="version-block">
+            <div class="version-block-header">
+              <span class="version-badge version-badge-b">Version B</span>
+            </div>
+            <div class="field-group">
+              <label for="vb-header">Landing Page Header</label>
+              <input type="text" id="vb-header" placeholder="Enter an alternative heading…" oninput="updatePreview()">
+            </div>
+            <div class="field-group">
+              <label for="vb-subtext">Landing Page Header Subtext</label>
+              <textarea id="vb-subtext" rows="3" placeholder="Enter alternative subtext…" oninput="updatePreview()"></textarea>
+            </div>
           </div>
         </div>
 
