@@ -630,7 +630,8 @@
     }
     .preview-scale-outer {
       overflow: hidden;
-      height: 260px;
+      /* tallest the preview should ever be; shrinks on shorter screens */
+      height: min(520px, calc(100vh - 442px));
       position: relative;
       background: white;
       border-radius: 0 0 8px 8px;
@@ -662,23 +663,26 @@
       background: rgba(36,4,70,0.07);
       box-shadow: 0 0 0 2px rgba(36,4,70,0.18);
     }
-    /* char count row below preview */
-    .copy-char-row {
-      display: flex;
-      gap: 16px;
-    }
-    .copy-char-item {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 4px;
-    }
-    .copy-char-label {
-      font-size: 12px;
-      color: var(--text-muted, #6b7280);
+    /* floating char-count badge inside the preview */
+    .preview-char-badge {
+      position: absolute;
+      background: var(--primary-100, #240446);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
       font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s;
+      z-index: 20;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
+    .preview-char-badge.visible { opacity: 1; }
+    .preview-char-badge.warn { background: #f59e0b; }
+    .preview-char-badge.over { background: #ef4444; }
 
     /* ── Landing page mockup elements ── */
     .lp-preview {
@@ -973,8 +977,8 @@
               </div>
               <div class="lp-body">
                 <div class="lp-welcome">Welcome!</div>
-                <div class="lp-header" id="preview-header" contenteditable="true" oninput="onPreviewInput('header')" onpaste="event.preventDefault();document.execCommand('insertText',false,event.clipboardData.getData('text/plain'))">Wealth is about experiencing life fully.</div>
-                <div class="lp-subtext" id="preview-subtext" contenteditable="true" oninput="onPreviewInput('subtext')" onpaste="event.preventDefault();document.execCommand('insertText',false,event.clipboardData.getData('text/plain'))">Take a few minutes to get clear on what matters most and what your money is really for.</div>
+                <div class="lp-header" id="preview-header" contenteditable="true" oninput="onPreviewInput('header')" onfocus="onPreviewFocus('header')" onblur="onPreviewBlur()" onpaste="event.preventDefault();document.execCommand('insertText',false,event.clipboardData.getData('text/plain'))">Wealth is about experiencing life fully.</div>
+                <div class="lp-subtext" id="preview-subtext" contenteditable="true" oninput="onPreviewInput('subtext')" onfocus="onPreviewFocus('subtext')" onblur="onPreviewBlur()" onpaste="event.preventDefault();document.execCommand('insertText',false,event.clipboardData.getData('text/plain'))">Take a few minutes to get clear on what matters most and what your money is really for.</div>
                 <div class="lp-cards-label">What you'll get:</div>
                 <div class="lp-cards">
                   <div class="lp-card">
@@ -998,20 +1002,9 @@
               </div>
             </div>
           </div>
-        </div>
+            <div id="preview-char-badge" class="preview-char-badge"></div>
+          </div><!-- /preview-scale-outer -->
           </div><!-- /preview-wrapper -->
-
-          <!-- Char counts -->
-          <div class="copy-char-row">
-            <div class="copy-char-item">
-              <span class="copy-char-label">Header</span>
-              <span class="char-count" id="cc-header">59 remaining</span>
-            </div>
-            <div class="copy-char-item">
-              <span class="copy-char-label">Subtext</span>
-              <span class="char-count" id="cc-subtext">13 remaining</span>
-            </div>
-          </div>
 
           <!-- Hidden backing store per version -->
           <input type="hidden" id="va-header" value="Wealth is about experiencing life fully.">
@@ -1448,19 +1441,42 @@
       const el = document.getElementById('preview-' + field);
       if (!el) return;
       const text = el.textContent;
-      // sync to hidden backing input for current version
-      const inputId = (_previewVersion === 'a' ? 'va-' : 'vb-') + field;
-      const input = document.getElementById(inputId);
+      // sync to hidden backing input
+      const input = document.getElementById((_previewVersion === 'a' ? 'va-' : 'vb-') + field);
       if (input) input.value = text;
-      // update char count
-      const max = 100;
-      const remaining = max - text.length;
-      const countEl = document.getElementById('cc-' + field);
-      if (countEl) {
-        countEl.textContent = remaining + ' remaining';
-        countEl.classList.toggle('warn', remaining <= 20 && remaining >= 0);
-        countEl.classList.toggle('over', remaining < 0);
+      // update badge if visible
+      const badge = document.getElementById('preview-char-badge');
+      if (badge && badge.classList.contains('visible')) {
+        const remaining = 100 - text.length;
+        badge.textContent = remaining + ' remaining';
+        badge.classList.toggle('warn', remaining <= 20 && remaining >= 0);
+        badge.classList.toggle('over', remaining < 0);
       }
+    }
+
+    function onPreviewFocus(field) {
+      const el = document.getElementById('preview-' + field);
+      const badge = document.getElementById('preview-char-badge');
+      const outer = document.querySelector('.preview-scale-outer');
+      if (!el || !badge || !outer) return;
+      const elRect = el.getBoundingClientRect();
+      const outerRect = outer.getBoundingClientRect();
+      const top = elRect.bottom - outerRect.top + 6;
+      const right = Math.max(8, outerRect.right - elRect.right);
+      badge.style.top = Math.min(top, outerRect.height - 32) + 'px';
+      badge.style.right = right + 'px';
+      badge.style.left = 'auto';
+      const remaining = 100 - el.textContent.length;
+      badge.textContent = remaining + ' remaining';
+      badge.classList.remove('warn', 'over');
+      badge.classList.toggle('warn', remaining <= 20 && remaining >= 0);
+      badge.classList.toggle('over', remaining < 0);
+      badge.classList.add('visible');
+    }
+
+    function onPreviewBlur() {
+      const badge = document.getElementById('preview-char-badge');
+      if (badge) badge.classList.remove('visible');
     }
 
     function setVersion(v) {
