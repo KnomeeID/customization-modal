@@ -745,6 +745,19 @@
       line-height: 1;
       margin-bottom: 1px;
     }
+    .lp-nav-org .org-reg {
+      font-size: 10px;
+      vertical-align: super;
+      margin-left: 1px;
+      font-weight: 400;
+    }
+    /* Registered Trademark setting (Branding tab) */
+    .trademark-hint {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+      margin: 4px 0 0 30px;
+    }
     .lp-body {
       padding: 48px 60px 40px;
       text-align: center;
@@ -1201,6 +1214,15 @@
           </div>
         </div>
 
+        <div>
+          <p class="section-label">Registered Trademark</p>
+          <label class="checkbox-item">
+            <input type="checkbox" id="hide-trademark" onchange="updatePreview()">
+            Hide the &reg; mark next to the organization name
+          </label>
+          <p class="trademark-hint">When checked, the &reg; symbol is not displayed next to the org name in the header.</p>
+        </div>
+
         <button class="btn-save" onclick="showSaveModal()">Save Changes</button>
       </section>
 
@@ -1588,6 +1610,13 @@
       const orgNameEl = document.getElementById('preview-org-name');
       if (!orgNameEl) return;
       orgNameEl.textContent = document.getElementById('org-name').value.trim() || 'Acme Advisors';
+      const hideTm = document.getElementById('hide-trademark');
+      if (!(hideTm && hideTm.checked)) {
+        const reg = document.createElement('span');
+        reg.className = 'org-reg';
+        reg.textContent = '®';
+        orgNameEl.appendChild(reg);
+      }
       const fontFamily = document.getElementById('font-family').value.trim() || 'Poppins';
       const fontType   = document.getElementById('font-type').value.trim() || 'Regular';
       orgNameEl.style.fontFamily  = `'${fontFamily}', 'Poppins', sans-serif`;
