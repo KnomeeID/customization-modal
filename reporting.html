@@ -160,6 +160,7 @@
   .strength.emerging { background: #fdf0cc; color: #92600a; }
   .bar { height: 6px; border-radius: 3px; background: #eee9f5; overflow: hidden; }
   .bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #7639A1, #a78bda); }
+  .niche-row-desc { font-size: 12px; color: var(--muted-2); line-height: 1.5; margin-top: 5px; }
   .niche-note { font-size: 13px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 6px; }
   .niche-note strong { color: var(--accent); }
 
@@ -334,19 +335,19 @@
         <table class="ptable">
           <thead>
             <tr>
-              <th>Prospect</th><th>Niche</th><th>Advisor Ready</th>
+              <th>Prospect</th><th>Cluster</th><th>Advisor Ready</th>
               <th>Emotional Readiness</th><th>Vision Clarity</th><th>Action Gap</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td class="name">Nicole Hunter</td><td><span class="niche-chip">Family Protector</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">High</span></td></tr>
-            <tr><td class="name">Jeffrey Hunter</td><td><span class="niche-chip">Confident Delegator</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">Low</span></td></tr>
-            <tr><td class="name">Ashley Smith</td><td><span class="niche-chip">Confident Delegator</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td></tr>
-            <tr><td class="name">David Smith</td><td><span class="niche-chip">Real Estate Expander</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td></tr>
-            <tr><td class="name">Kira Lopez</td><td><span class="niche-chip">Cash Flow Stressed</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">High</span></td></tr>
-            <tr><td class="name">Luke Lopez</td><td><span class="niche-chip">Cash Flow Stressed</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">High</span></td></tr>
-            <tr><td class="name">Matt Bravos</td><td><span class="niche-chip">Work-Optional Seeker</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl medium">Medium</span></td></tr>
-            <tr><td class="name">Kristen Bravos</td><td><span class="niche-chip">Family Protector</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl low">High</span></td></tr>
+            <tr><td class="name">Nicole Hunter</td><td><span class="niche-chip">Securing the Kids' Future</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl low">High</span></td></tr>
+            <tr><td class="name">Jeffrey Hunter</td><td><span class="niche-chip">Ready to Delegate</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">Low</span></td></tr>
+            <tr><td class="name">Ashley Smith</td><td><span class="niche-chip">Ready to Delegate</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td></tr>
+            <tr><td class="name">David Smith</td><td><span class="niche-chip">Second-Property Goal</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td></tr>
+            <tr><td class="name">Kira Lopez</td><td><span class="niche-chip">Stabilize Cash Flow First</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">High</span></td></tr>
+            <tr><td class="name">Luke Lopez</td><td><span class="niche-chip">Stabilize Cash Flow First</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl high">High</span></td><td><span class="lvl low">High</span></td></tr>
+            <tr><td class="name">Matt Bravos</td><td><span class="niche-chip">Work-Optional Timeline</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl low">Low</span></td><td><span class="lvl medium">Medium</span></td></tr>
+            <tr><td class="name">Kristen Bravos</td><td><span class="niche-chip">Securing the Kids' Future</span></td><td><span class="lvl high">High</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl medium">Medium</span></td><td><span class="lvl low">High</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -361,17 +362,17 @@
       <div class="leads-grid">
         <div class="lead-card">
           <div class="lead-name">Jeffrey Hunter</div>
-          <div class="lead-niche">Confident Delegator</div>
+          <div class="lead-niche">Ready to Delegate</div>
           <p class="lead-desc">High confidence, clear vision, already taking steps. Wants to delegate financial management. <strong>Needs a plan that funds kids' education without delaying retirement.</strong></p>
         </div>
         <div class="lead-card">
           <div class="lead-name">Ashley Smith</div>
-          <div class="lead-niche">Confident Delegator</div>
+          <div class="lead-niche">Ready to Delegate</div>
           <p class="lead-desc">High confidence, strong vision, actively engaged. Wants reassurance and structure. <strong>Key moment: renovation costs and school costs are about to overlap.</strong></p>
         </div>
         <div class="lead-card">
           <div class="lead-name">David Smith</div>
-          <div class="lead-niche">Real Estate Expander</div>
+          <div class="lead-niche">Second-Property Goal</div>
           <p class="lead-desc">Highly confident, vivid future vision, explicitly wants advisor help. Primary goal: lake house within 5 years. <strong>Cash flow calibration is the near-term unlock.</strong></p>
         </div>
       </div>
@@ -391,24 +392,29 @@
           <div class="sub-sub">Is your marketing reaching the right people?</div>
 
           <div class="niche-row">
-            <div class="niche-row-top"><span class="n">Confident Delegator</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
+            <div class="niche-row-top"><span class="n">Ready to Delegate</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
             <div class="bar"><i style="width:25%"></i></div>
+            <div class="niche-row-desc">Wants a professional to take over ongoing management → propose a planning relationship.</div>
           </div>
           <div class="niche-row">
-            <div class="niche-row-top"><span class="n">Family Protector</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
+            <div class="niche-row-top"><span class="n">Securing the Kids' Future</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
             <div class="bar"><i style="width:25%"></i></div>
+            <div class="niche-row-desc">Anchored on the children's long-term security → open with education funding + estate basics.</div>
           </div>
           <div class="niche-row">
-            <div class="niche-row-top"><span class="n">Cash Flow Stressed</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
+            <div class="niche-row-top"><span class="n">Stabilize Cash Flow First</span><span class="v">25% <span class="strength strong">Strong</span></span></div>
             <div class="bar"><i style="width:25%"></i></div>
+            <div class="niche-row-desc">Negative monthly flow, pulling from savings → near-term stabilization before any investing talk.</div>
           </div>
           <div class="niche-row">
-            <div class="niche-row-top"><span class="n">Real Estate Expander</span><span class="v">13% <span class="strength emerging">Emerging</span></span></div>
+            <div class="niche-row-top"><span class="n">Second-Property Goal</span><span class="v">13% <span class="strength emerging">Emerging</span></span></div>
             <div class="bar"><i style="width:13%"></i></div>
+            <div class="niche-row-desc">Named a specific property (lake house, relocation) → feasibility + cash-flow calibration plan.</div>
           </div>
           <div class="niche-row">
-            <div class="niche-row-top"><span class="n">Work-Optional Seeker</span><span class="v">13% <span class="strength emerging">Emerging</span></span></div>
+            <div class="niche-row-top"><span class="n">Work-Optional Timeline</span><span class="v">13% <span class="strength emerging">Emerging</span></span></div>
             <div class="bar"><i style="width:13%"></i></div>
+            <div class="niche-row-desc">Explicit exit window before traditional retirement → timeline plan while the kids are still home.</div>
           </div>
 
           <div class="niche-note"><strong>Niche concentration:</strong> Top 2 niches represent 50% of prospects — marketing has a clear target audience.</div>
@@ -461,9 +467,9 @@
 
       <div class="sum-quote">"You've worked hard to build something real. Let's make sure you're actually enjoying it."</div>
 
-      <div class="sum-reco"><strong>Recommendation:</strong> Double down on the "enjoying life now without sacrificing later" message — it lands across Confident Delegators, Family Protectors, and Cash Flow Stressed segments equally. It's the thread that connects your best prospects.</div>
+      <div class="sum-reco"><strong>Recommendation:</strong> Double down on the "enjoying life now without sacrificing later" message — it lands across the Ready to Delegate, Securing the Kids' Future, and Stabilize Cash Flow First clusters equally. It's the thread that connects your best prospects.</div>
       <div class="sum-reco" style="border-left-color: var(--gold);"><strong>Emerging opportunity:</strong> Real estate-adjacent planning (lake house, second property, relocation) is showing up organically without being targeted. Worth testing a content angle around it.</div>
-      <div class="sum-reco" style="border-left-color: #a78bfa;"><strong>Watch this segment:</strong> Cash Flow Stressed prospects have the highest long-term potential but need near-term stabilization first. They won't convert until that tension is resolved — which is exactly what an advisor conversation can unlock.</div>
+      <div class="sum-reco" style="border-left-color: #a78bfa;"><strong>Watch this segment:</strong> Stabilize Cash Flow First prospects have the highest long-term potential but need near-term stabilization first. They won't convert until that tension is resolved — which is exactly what an advisor conversation can unlock.</div>
 
       <button class="sum-btn">View detailed niche analysis →</button>
     </div>
